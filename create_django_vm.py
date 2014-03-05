@@ -4,7 +4,6 @@ import argparse
 import os
 import subprocess
 
-from RUtils import make_sure_path_exists
 
 #
 #   create_django_vm.py
@@ -15,6 +14,19 @@ from RUtils import make_sure_path_exists
 #   by Ron Davis, Reactuate Software
 #   http://www.reactuatesoftware.com
 #
+
+def make_sure_path_exists(path):
+    """ Tries to make a directory. If it exists we just return. 
+    
+    :param path: path were you want to make sure there is a directory
+    :return none
+    """
+    try:
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise
+
 
 def git_clone_command(in_cookbook, in_target_directory):
     """ Builds the actual git command to get the named cookbook.
