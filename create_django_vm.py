@@ -3,6 +3,7 @@ import argparse
 
 import os
 import subprocess
+import errno
 
 
 #
@@ -55,11 +56,9 @@ def install_cookbooks(in_target_directory):
     :type in_target_directory: str
     :param in_target_directory: absolute path to directory we are setting up Vagrant in.
     """
-    # copy our cookbook directory
-    cp_command = "cp -R cookbooks '{}/'".format(in_target_directory)
-    os.system(cp_command)
+    copy_cookbooks_command = "cp -R cookbooks '{}/'".format(in_target_directory)
+    os.system(copy_cookbooks_command)
 
-    # create the cook books directory in target folder if it isn't there already
     new_cookbooks_dir_path = "{}/cookbooks/".format(in_target_directory)
     make_sure_path_exists(new_cookbooks_dir_path)
 
@@ -71,6 +70,7 @@ def install_cookbooks(in_target_directory):
     #     os.system( git_clone_command("vim", new_cookbooks_dir_path )) # commented out because I don't use vim
     os.system(git_clone_command("openssl", new_cookbooks_dir_path))
     os.system(git_clone_command("postgresql", new_cookbooks_dir_path))
+    os.system(git_clone_command("yum-epel", new_cookbooks_dir_path))
     os.system(git_clone_command("yum", new_cookbooks_dir_path))
     os.system(git_clone_command("python", new_cookbooks_dir_path))
 
@@ -81,12 +81,27 @@ def install_vagrant(in_target_directory):
 
     :param in_target_directory: The directory we are setting up Vagrant in.
     """
-    # Copy the Vagrant file
-    cp_command = "cp Vagrantfile '{}/Vagrantfile'".format(in_target_directory)
-    os.system(cp_command)
+    print("---------------------------------------------")
+    print("  Installing vagrant related files")
+    print("---------------------------------------------")
+    this_file_path = os.path.realpath(__file__)
+    this_file_dir = os.path.dirname(this_file_path)
+    
+    print("Copying Vagrantfile")
+    copy_vagrantfile_command = "cp {}/Vagrantfile '{}/Vagrantfile'".format(this_file_dir, in_target_directory)
+    os.system(copy_vagrantfile_command)
 
     # Create the shared directory
-    shared_dir_path = make_sure_path_exists("{}/django_shared/".format(in_target_directory))
+    make_sure_path_exists("{}/django_shared/".format(in_target_directory))
+    
+    print("Copying requirements file")
+    cp_requirements_command = "cp {}/requirements.txt '{}/django_shared/requirements.txt'".format(this_file_dir, in_target_directory)
+    os.system(cp_requirements_command)
+    
+    print("Copying copying bookstrap script")
+    cp_bootstrap_shell_command = "cp {}/vagrant_install_django_dev.sh '{}/vagrant_install_django_dev.sh'".format(this_file_dir, in_target_directory)
+    os.system(cp_bootstrap_shell_command)
+    
 
 
 def main():
@@ -108,7 +123,7 @@ def main():
         print "Directory '{}' doesn't exist".format(target_dir)
         exit()
 
-    install_cookbooks(target_dir)
+#     install_cookbooks(target_dir)
     install_vagrant(target_dir)
 
 # Standard boilerplate to call the main() function to begin
