@@ -46,14 +46,16 @@ echo "---------------------------------------------"
 apt-get install -y git-core
 
 echo "---------------------------------------------"
-echo "installing install pip"
+echo "installing install pip and upgrade"
 echo "---------------------------------------------"
-apt-get install -y python-pip
+apt-get install -y python-pip python3-pip
+pip3 install --user --upgrade pip
 
 echo "---------------------------------------------"
 echo "installing django env based on a requirements file."
 echo "---------------------------------------------"
-pip install -r "django_shared/requirements.txt"
+export LC_ALL=C
+pip3 install -r "django_shared/requirements.txt"
 
 echo "---------------------------------------------"
 echo " Finished."
