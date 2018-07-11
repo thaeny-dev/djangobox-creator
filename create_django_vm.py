@@ -48,33 +48,6 @@ def git_clone_command(in_cookbook, in_target_directory):
     return target_path
 
 
-def install_cookbooks(in_target_directory):
-    """ Creates cookbooks directory in the target directory
-
-    Copies the cookbook folder so we get our custom django cookbook. Then uses  git to get many of the cookbooks
-
-    :type in_target_directory: str
-    :param in_target_directory: absolute path to directory we are setting up Vagrant in.
-    """
-    copy_cookbooks_command = "cp -R cookbooks '{}/'".format(in_target_directory)
-    os.system(copy_cookbooks_command)
-
-    new_cookbooks_dir_path = "{}/cookbooks/".format(in_target_directory)
-    make_sure_path_exists(new_cookbooks_dir_path)
-
-    # use git to get all the cookbooks
-    os.system(git_clone_command("apache2", new_cookbooks_dir_path))
-    os.system(git_clone_command("apt", new_cookbooks_dir_path))
-    os.system(git_clone_command("build-essential", new_cookbooks_dir_path))
-    os.system(git_clone_command("git", new_cookbooks_dir_path))
-    #     os.system( git_clone_command("vim", new_cookbooks_dir_path )) # commented out because I don't use vim
-    os.system(git_clone_command("openssl", new_cookbooks_dir_path))
-    os.system(git_clone_command("postgresql", new_cookbooks_dir_path))
-    os.system(git_clone_command("yum-epel", new_cookbooks_dir_path))
-    os.system(git_clone_command("yum", new_cookbooks_dir_path))
-    os.system(git_clone_command("python", new_cookbooks_dir_path))
-
-
 def install_vagrant(in_target_directory):
     """
     Set up the folder for vagrant
@@ -101,7 +74,6 @@ def install_vagrant(in_target_directory):
     print("Copying copying bookstrap script")
     cp_bootstrap_shell_command = "cp {}/vagrant_install_django_dev.sh '{}/vagrant_install_django_dev.sh'".format(this_file_dir, in_target_directory)
     os.system(cp_bootstrap_shell_command)
-    
 
 
 def main():
@@ -123,7 +95,6 @@ def main():
         print "Directory '{}' doesn't exist".format(target_dir)
         exit()
 
-#     install_cookbooks(target_dir)
     install_vagrant(target_dir)
 
 # Standard boilerplate to call the main() function to begin
