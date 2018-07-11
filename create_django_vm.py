@@ -28,26 +28,6 @@ def make_sure_path_exists(path):
         if exception.errno != errno.EEXIST:
             raise
 
-
-def git_clone_command(in_cookbook, in_target_directory):
-    """ Builds the actual git command to get the named cookbook.
-
-    This assumes you are getting these cookbooks from opscode-cookbooks
-
-    :type in_cookbook: str
-    :param in_cookbook: name of the cookbook to be installed
-    :param in_target_directory: directory where cookbook should be installed.
-    """
-    base_command = "git clone git://github.com/opscode-cookbooks/"
-    git_base = "{}{}.git".format(base_command, in_cookbook)
-    target_path = "{} '{}{}'".format(git_base, in_target_directory, in_cookbook)
-    print "----------------------------------------------"
-    print "Installing '{}' cookbook".format(in_cookbook)
-    print "----------------------------------------------"
-    print target_path
-    return target_path
-
-
 def install_vagrant(in_target_directory):
     """
     Set up the folder for vagrant
@@ -92,8 +72,7 @@ def main():
     target_dir = os.path.abspath(g_args.target_directory)
 
     if not os.path.exists(target_dir):
-        print "Directory '{}' doesn't exist".format(target_dir)
-        exit()
+        make_sure_path_exists(target_dir)
 
     install_vagrant(target_dir)
 
