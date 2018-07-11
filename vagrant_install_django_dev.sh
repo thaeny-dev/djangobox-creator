@@ -23,7 +23,7 @@ apt-get update
 echo "---------------------------------------------"
 echo "installing libpq-dev python-dev used by postgresql"
 echo "---------------------------------------------"
-apt-get install -y libpq-dev python-dev
+apt-get install -y libpq-dev python-dev python3-dev
 
 echo "---------------------------------------------"
 echo "installing postgresql"
