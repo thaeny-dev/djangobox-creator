@@ -3,15 +3,17 @@
 
 Vagrant.configure("2") do |config|
     # Every Vagrant virtual environment requires a box to build off of.
-    config.vm.box = "ubuntu_12.04.3"
-
-    # The url from where the 'config.vm.box' box will be fetched if it
-    # doesn't already exist on the user's system.
-    config.vm.box_url = "http://nitron-vagrant.s3-website-us-east-1.amazonaws.com/vagrant_ubuntu_12.04.3_amd64_virtualbox.box"
+    config.vm.box = "ubuntu/xenial64"
+    _local_vagrant_box = "/opt/vagrant-boxes/xenial-server-cloudimg-amd64-vagrant.box"
+  	if File.exists?(_local_vagrant_box))
+        config.vm.box_url = "file://" + _local_vagrant_box
+    else
+        config.vm.box_version = ">= v20180710.0.0 "
+  	end
 
     # set the name of the box to make it a little easier to find in virtual box
     config.vm.provider "virtualbox" do |custom_virtualbox_settings|
-      custom_virtualbox_settings.name = "django_dev"
+      custom_virtualbox_settings.name = "djangobox"
     end
 
     # Create a forwarded port mapping which allows access to a specific port
